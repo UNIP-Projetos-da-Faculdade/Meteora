@@ -1,0 +1,242 @@
+# ==========================================================
+# SignaLive - .gitignore
+# ==========================================================
+
+# -----------------------
+# Sistema Operacional
+# -----------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# -----------------------
+# IDEs
+# -----------------------
+.vscode/
+.idea/
+*.iml
+
+# -----------------------
+# Python
+# -----------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Distribuição
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checkers / linters
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.dmypy.json
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+pnpm-debug.log*
+
+# Variáveis de ambiente
+.env*
+!.env.example
+
+# -----------------------
+# Django
+# -----------------------
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# -----------------------
+# FastAPI / Uvicorn
+# -----------------------
+uvicorn.log
+
+# -----------------------
+# Jupyter
+# -----------------------
+.ipynb_checkpoints/
+
+# -----------------------
+# Machine Learning
+# -----------------------
+
+# Modelos
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.keras
+*.h5
+*.hdf5
+*.joblib
+*.pickle
+*.pkl
+
+# TensorBoard
+runs/
+tensorboard/
+
+# MLflow
+mlruns/
+
+# Cache
+.cache/
+
+# -----------------------
+# Datasets
+# -----------------------
+dataset/
+datasets/
+data/
+!ia/configs/data/
+!ia/configs/data/**
+raw/
+processed/
+att/
+vid/
+captures/
+exports/
+reports/
+!ia/reports/
+!ia/reports/**
+
+# Generated static-recognition artifacts. Manifests and audit reports stay tracked.
+ia/.feature-cache/
+ia/model_registry/current.local.json
+ia/model_registry/releases/**/*.pt
+ia/model_registry/releases/**/*.pth
+ia/model_registry/releases/**/*.onnx
+
+# Imagens e vídeos gerados para treinamento
+*.webm
+*.avi
+*.mov
+
+# -----------------------
+# MediaPipe / OpenCV temporários
+# -----------------------
+tmp/
+temp/
+
+# -----------------------
+# Node (geral)
+# -----------------------
+node_modules/
+
+# -----------------------
+# Frontend (Next.js) - /frontend
+# -----------------------
+/frontend/node_modules
+/frontend/.pnp
+/frontend/.pnp.*
+/frontend/.yarn/*
+!/frontend/.yarn/patches
+!/frontend/.yarn/plugins
+!/frontend/.yarn/releases
+!/frontend/.yarn/versions
+
+# testing
+/frontend/coverage
+
+# next.js
+/frontend/.next/
+/frontend/out/
+
+# production
+/frontend/build
+
+# vercel
+/frontend/.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# -----------------------
+# Android
+# -----------------------
+.gradle/
+local.properties
+*.apk
+*.aab
+*.ap_
+
+# Build Android
+**/build/
+
+# -----------------------
+# Blender / Modelagem 3D
+# -----------------------
+*.blend1
+*.blend2
+*.blend@
+
+# Renderizações
+renders/
+
+# -----------------------
+# Arquivos compactados
+# -----------------------
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+# -----------------------
+# Backups
+# -----------------------
+*.bak
+*.old
+*.orig
+*.tmp
+*.swp
+*.swo
+
+# -----------------------
+# Segredos
+# -----------------------
+*.pem
+*.key
+*.crt
+*.p12
+
+# -----------------------
+# VSCode Workspace
+# -----------------------
+*.code-workspace
+
+# -----------------------
+# IA
+# -----------------------
+AGENTS.md
+
+# Artefatos locais da IA
+ia/cache/
+ia/runs/
+CLAUDE.md
+.claude
