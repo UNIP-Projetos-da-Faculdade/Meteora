@@ -10,7 +10,7 @@
 const char* ssid = ""; 
 const char* password = "";
 
-// ===== API DJANGO =====
+// ===== API FAST =====
 const char* servidor = "http://10.0.0.114:8000/api/medicoes/";
 
 // ===== SENSORES =====
