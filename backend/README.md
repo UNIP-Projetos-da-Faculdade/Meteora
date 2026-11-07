@@ -120,9 +120,13 @@ como string `id` nas rotas de medições.
 
 Os quatro campos são obrigatórios e aceitam números JSON, incluindo inteiros.
 Strings numéricas, booleanos, `null`, NaN, infinito, campos adicionais e timestamps
-informados pelo cliente são rejeitados. Umidade deve estar entre 0 e 100;
-pressão e luminosidade devem ser não negativas. Temperatura aceita valores
-negativos. Zero é uma medição válida e não representa ausência.
+informados pelo cliente são rejeitados. Valores numéricos fora das faixas
+físicas são aceitos e preservados, como no projeto Django: `luminosidade: -1`
+não impede a gravação de temperatura, umidade e pressão. O histórico e
+`/api/station/latest` conservam os números originais. O frontend trata umidade
+fora de 0 a 100, pressão negativa e luminosidade negativa como leitura
+indisponível apenas naquele sensor. Temperatura pode ser negativa. Zero é
+uma medição válida e não representa ausência.
 
 Erros de validação retornam HTTP 422 com `detail` contendo `loc`, `msg` e `type`.
 Falhas do PyMongo retornam HTTP 503:

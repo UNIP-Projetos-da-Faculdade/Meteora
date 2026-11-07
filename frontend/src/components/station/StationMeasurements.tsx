@@ -27,7 +27,7 @@ export default function StationMeasurements({ resource, stale, loading }: { reso
       {measurements.map((item) => <div key={item.label} className="min-w-0 rounded-2xl border border-meteora-border bg-meteora-bg/65 p-3.5">
         <dt className="flex items-center gap-1.5 text-xs text-meteora-muted"><FontAwesomeIcon icon={item.icon} className="size-3.5 shrink-0 text-meteora-accent" />{item.label}</dt>
         <dd className="mt-2 whitespace-nowrap text-lg font-extrabold tabular-nums">{formatNumber(item.value, item.digits)}{item.value != null && <span>{item.unit}</span>}</dd>
-        <dd className="mt-1 text-[10px] leading-relaxed text-meteora-muted">{item.detail}</dd>
+        <dd className="mt-1 text-[10px] leading-relaxed text-meteora-muted">{data && item.value == null ? "Leitura indisponível" : item.detail}</dd>
       </div>)}
     </dl>
     {!data && <p className="mt-4 text-xs text-meteora-muted">{resource?.status === "error" ? "Não foi possível obter as medições. Tentaremos novamente automaticamente." : "Nenhuma medição recebida. Os valores aparecerão quando a estação enviar uma leitura."}</p>}

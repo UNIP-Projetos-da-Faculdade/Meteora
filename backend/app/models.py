@@ -10,9 +10,10 @@ class MeasurementIn(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     temperatura: FiniteNumber = Field(description="Temperatura do DHT22 em °C")
-    umidade: FiniteNumber = Field(ge=0, le=100, description="Umidade relativa em %")
-    pressao: FiniteNumber = Field(ge=0, description="Pressão do BMP280 em hPa")
-    luminosidade: FiniteNumber = Field(ge=0, description="Iluminância do BH1750 em lux")
+    # Preserva também os códigos numéricos de falha enviados pelos sensores.
+    umidade: FiniteNumber = Field(description="Umidade relativa em %")
+    pressao: FiniteNumber = Field(description="Pressão do BMP280 em hPa")
+    luminosidade: FiniteNumber = Field(description="Iluminância do BH1750 em lux")
 
 
 class MeasurementOut(MeasurementIn):

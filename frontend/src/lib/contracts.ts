@@ -18,6 +18,12 @@ function number(value: unknown, min = -Infinity, max = Infinity): number | null 
   return value;
 }
 
+function sensorNumber(value: unknown, min: number, max = Infinity): number | null {
+  const reading = number(value);
+  // Uma falha numérica de um sensor não descarta os demais sensores do ciclo.
+  return reading !== null && (reading < min || reading > max) ? null : reading;
+}
+
 function timestamp(value: unknown): string {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(value) || !Number.isFinite(Date.parse(value))) {
     throw new Error("Data inválida: informe ISO 8601 com fuso horário");
@@ -51,9 +57,9 @@ export function parseStation(value: unknown): StationReading {
   return {
     observedAt: timestamp(data.observedAt),
     temperature: number(data.temperature),
-    humidity: number(data.humidity, 0, 100),
-    pressure: number(data.pressure, 0),
-    illuminance: number(data.illuminance, 0),
+    humidity: sensorNumber(data.humidity, 0, 100),
+    pressure: sensorNumber(data.pressure, 0),
+    illuminance: sensorNumber(data.illuminance, 0),
     rain24h: number(data.rain24h, 0),
     lightRelative: number(data.lightRelative, 0, 100),
     airRaw: number(data.airRaw, 0),

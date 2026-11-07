@@ -22,11 +22,22 @@ test("preserva zero e normaliza leituras ausentes para null", () => {
 test("preserva a iluminância do BH1750 em lux, inclusive zero", () => {
   assert.equal(parseStation({ ...station, illuminance: 350.8 }).illuminance, 350.8);
   assert.equal(parseStation({ ...station, illuminance: 0 }).illuminance, 0);
-  assert.throws(() => parseStation({ ...station, illuminance: -1 }));
+});
+
+test("falhas numéricas de um sensor não descartam as demais medições", () => {
+  const reading = { ...station, temperature: 30.2, humidity: 65, pressure: 856.4, illuminance: 350.8 };
+  for (const [field, value] of [["illuminance", -1], ["illuminance", -2], ["humidity", -1], ["humidity", 101], ["pressure", -1]]) {
+    const result = parseStation({ ...reading, [field]: value });
+    assert.equal(result[field], null);
+    for (const other of ["temperature", "humidity", "pressure", "illuminance"].filter((key) => key !== field)) {
+      assert.equal(result[other], reading[other]);
+    }
+  }
+  assert.equal(parseStation({ ...reading, temperature: -5 }).temperature, -5);
 });
 
 test("rejeita medições malformadas e datas sem fuso", () => {
-  for (const patch of [{ temperature: "31" }, { temperature: NaN }, { humidity: 101 }, { humidity: -1 }, { rain24h: -1 }, { airRaw: -1 }, { observedAt: "2026-11-04T19:00:00" }, { observedAt: "2026-02-30T19:00:00Z" }, { minimum: 30, maximum: 20 }]) {
+  for (const patch of [{ temperature: "31" }, { temperature: NaN }, { humidity: "65" }, { pressure: Infinity }, { illuminance: NaN }, { rain24h: -1 }, { airRaw: -1 }, { observedAt: "2026-11-04T19:00:00" }, { observedAt: "2026-02-30T19:00:00Z" }, { minimum: 30, maximum: 20 }]) {
     assert.throws(() => parseStation({ ...station, ...patch }));
   }
 });
@@ -78,6 +89,18 @@ test("consulta a API sem cache e valida a resposta", async (t) => {
   assert.equal(result.status, "ready");
   assert.equal(result.data.temperature, 0);
   assert.equal(fetch.mock.calls[0].arguments[1].cache, "no-store");
+});
+
+test("BH1750 com erro mantém a estação disponível e os outros sensores atualizados", async (t) => {
+  const reading = { ...station, temperature: 30.2, humidity: 65, pressure: 856.4, illuminance: -1 };
+  t.mock.method(globalThis, "fetch", async () => Response.json(reading));
+  const result = await readBackend("http://localhost:8000/station", parseStation);
+  assert.equal(result.status, "ready");
+  const dashboard = parseDashboard({ station: result, forecast: { status: "unconfigured", data: null } });
+  assert.equal(dashboard.station.data.illuminance, null);
+  assert.equal(dashboard.station.data.temperature, reading.temperature);
+  assert.equal(dashboard.station.data.humidity, reading.humidity);
+  assert.equal(dashboard.station.data.pressure, reading.pressure);
 });
 
 test("HTTP inválido, JSON incorreto e timeout viram erros controlados", async (t) => {

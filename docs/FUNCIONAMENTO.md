@@ -56,9 +56,14 @@ O ESP32 e esse computador precisam conseguir se comunicar pela rede.
 O FastAPI recebe a requisição e valida os quatro campos com Pydantic:
 
 - Todos os campos devem estar presentes e conter números finitos.
-- A umidade deve estar entre 0 e 100.
-- A pressão e a luminosidade devem ser não negativas.
+- Valores numéricos fora da faixa física são preservados, sem descartar os
+  demais sensores daquele ciclo.
 - A temperatura pode ser negativa, e zero é um valor válido nas medições.
+
+O BH1750 pode retornar códigos numéricos de falha, como `-1` ou `-2`, que
+passam pela verificação de NaN do firmware. O backend aceita esses números,
+registra o conjunto e responde HTTP 201. Eles permanecem no histórico para
+consulta, mas não são apresentados como luminosidade válida no painel.
 
 Campos adicionais, valores nulos, strings com unidades e números inválidos
 são rejeitados. A API responde com **HTTP 422** quando a requisição não segue
@@ -114,6 +119,7 @@ continuam disponíveis na API e no MongoDB.
 | Há uma medição recente | Os cards apresentam os valores e o horário da leitura |
 | A leitura tem mais de 90 segundos | O painel identifica a leitura como desatualizada |
 | Uma consulta falha temporariamente | O painel mantém a última resposta válida disponível e informa a falha |
+| Umidade fora de 0 a 100, pressão negativa ou luminosidade negativa | O card daquele sensor mostra `—` e “Leitura indisponível”; os demais continuam atualizando e todos os números são preservados no banco |
 | O backend ou o MongoDB está indisponível | O painel informa dificuldade para atualizar e volta a tentar nas próximas consultas |
 | Existem documentos antigos incompletos | Eles são preservados no banco e ignorados nas consultas de medições |
 

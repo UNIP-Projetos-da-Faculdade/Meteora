@@ -54,10 +54,16 @@ Objeto direto, sem envelope `data`. Exemplo de formato, não de medição real:
 | `temperature`, `minimum`, `maximum`, `feelsLike` | °C; números ou `null` |
 | `humidity`, `lightRelative` | Percentual de 0 a 100 |
 | `pressure` | hPa, não Pa; valor não negativo |
+| `illuminance` | lux; valor não negativo; não é um percentual |
 | `rain24h` | mm acumulados nas últimas 24 horas; não negativo |
 | `airRaw` | Contagem ADC bruta; não negativa; não é um índice de qualidade do ar |
 
 Os campos numéricos ausentes ou `null` significam que não há leitura.
+O backend preserva os números recebidos dos sensores, inclusive códigos de
+falha. Na adaptação para o painel, umidade fora de 0 a 100, pressão negativa
+e luminosidade negativa são convertidas para `null` apenas naquele campo.
+Os demais sensores permanecem disponíveis; os números originais continuam
+no MongoDB e nas rotas de medições do backend.
 Não envie strings com unidades (`"31 °C"`), `NaN`, ou zero como substituto de ausência.
 Mínima, máxima e sensação térmica devem vir calculadas do backend se estiverem disponíveis;
 o frontend não inventa valores para esses campos.

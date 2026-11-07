@@ -35,7 +35,7 @@ def test_reads_ignore_legacy_records_before_and_after_new_measurements(client, d
 
 
 @pytest.mark.parametrize("patch", [
-    {"temperatura": None}, {"umidade": 101}, {"pressao": -1},
+    {"temperatura": None}, {"umidade": None}, {"pressao": "1013 hPa"},
     {"luminosidade": "350 lux"}, {"temperatura": float("nan")},
     {"luminosidade": float("inf")}, {"umidade": [50]},
     {"timestamp": [datetime(2026, 11, 7, 12, tzinfo=UTC)]},
@@ -54,7 +54,7 @@ def test_incompatible_newer_documents_do_not_hide_valid_readings(
 def test_daily_extremes_ignore_invalid_records_from_same_day(client, database, payload):
     observed_at = datetime(2026, 11, 7, 12, tzinfo=UTC)
     database.medicoes.insert_one(payload | {"temperatura": 25.0, "timestamp": observed_at})
-    for patch in [{"temperatura": -200.0, "umidade": None}, {"temperatura": 200.0, "pressao": -1}]:
+    for patch in [{"temperatura": -200.0, "umidade": None}, {"temperatura": 200.0, "pressao": None}]:
         database.medicoes.insert_one(payload | {"timestamp": observed_at - timedelta(minutes=1)} | patch)
     data = client.get("/api/station/latest").json()
     assert data["minimum"] == data["maximum"] == 25.0

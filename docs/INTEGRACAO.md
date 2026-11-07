@@ -28,9 +28,11 @@ conversão de pressão de Pa para hPa. A luminosidade permanece em lux.
 | Autenticação | Não exigida na ingestão do MVP |
 | Sucesso | HTTP 201 com a medição registrada e seu identificador |
 
-A API não exige campos adicionais ao firmware. A umidade precisa estar entre
-0 e 100; pressão e luminosidade devem ser não negativas. Strings, valores
-nulos, NaN, infinito e campos adicionais são rejeitados com HTTP 422.
+A API não exige campos adicionais ao firmware. Os quatro números são
+preservados mesmo quando estão fora das faixas físicas, incluindo os códigos
+de falha do BH1750, como `-1` e `-2`. Isso permite gravar os demais sensores
+do mesmo ciclo. Strings, valores nulos, NaN, infinito e campos adicionais
+são rejeitados com HTTP 422.
 
 ## Persistência e horário
 
@@ -78,6 +80,12 @@ dentro do recurso `station`, com `status` e `data`:
 | `ready`, com `data` nulo | A API respondeu 204 e ainda não há leitura disponível |
 | `unconfigured` | A URL da estação não foi configurada |
 | `error` | Houve falha HTTP, timeout ou resposta incompatível |
+
+Umidade fora de 0 a 100, pressão negativa e luminosidade negativa são
+convertidas para `null` somente na resposta do Next.js. O card correspondente
+mostra `—` e “Leitura indisponível”; os demais valores continuam atualizando.
+O backend, o histórico da API e o MongoDB preservam o número original.
+Temperaturas negativas e valores iguais a zero continuam sendo apresentados.
 
 O envelope mantém `forecast` com estado `unconfigured` por compatibilidade.
 Os campos opcionais de chuva, leitura de ar, luz relativa e sensação térmica

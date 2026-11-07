@@ -71,6 +71,11 @@ pelo backend com medições do dia da leitura. Horários usam Brasília; campos
 ausentes aparecem como `—` e zero é válido. A luminosidade é recebida em
 `illuminance` e exibida em lux, sem converter para percentual.
 
+Umidade fora de 0 a 100, pressão negativa ou luminosidade negativa (como os
+códigos de falha do BH1750) deixam apenas o card correspondente com `—` e
+“Leitura indisponível”. Os outros sensores continuam atualizando. Os valores
+originais são preservados pelo backend no MongoDB e no histórico da API.
+
 Chuva, sensor de ar, sensação térmica, previsões e horários solares não aparecem
 na tela. Não são enviados pelos sensores atuais. Previsões exigiriam um provedor
 meteorológico e horários solares uma fonte ou cálculo por localização/data.

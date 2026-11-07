@@ -315,9 +315,13 @@ O backend verifica:
 
 - Presença dos quatro campos obrigatórios.
 - Tipos numéricos válidos.
-- Umidade entre 0% e 100%.
-- Pressão e luminosidade não negativas.
 - Ausência de valores nulos, infinitos ou NaN.
+
+Os valores numéricos são preservados como enviados, inclusive códigos de falha
+como `luminosidade: -1`, sem descartar os demais sensores. No painel, umidade
+fora de 0% a 100%, pressão negativa ou luminosidade negativa aparecem como
+`—` com “Leitura indisponível”. Os valores originais permanecem no banco e no
+histórico da API. Zero continua sendo uma medição válida.
 
 O timestamp é gerado automaticamente pelo backend em UTC.
 
@@ -350,6 +354,7 @@ A rotina verifica:
 - Verificação de lint e TypeScript.
 - Build da aplicação Next.js.
 - Integração HTTP entre os componentes.
+- Gravação de códigos de falha dos sensores sem interromper os demais cards.
 
 ### Resultados registrados
 
@@ -357,8 +362,8 @@ Na revisão de **07/11/2026**, foram registrados:
 
 | Verificação | Resultado |
 |---|---|
-| Testes do backend | 81 aprovados |
-| Testes do frontend | 14 aprovados |
+| Testes do backend | 83 aprovados |
+| Testes do frontend | 16 aprovados |
 | Lint e TypeScript | Aprovados |
 | Build do Next.js | Aprovado |
 | Integração HTTP | Aprovada |

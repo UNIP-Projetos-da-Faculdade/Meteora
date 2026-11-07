@@ -188,6 +188,26 @@ def validate_integration(settings: Settings) -> dict:
             require(all(label not in visible for label in ["Chuva", "Previsão por hora", "Próximos 7 dias", "Sensor de ar"]),
                     "A pagina ainda apresenta secoes fora do escopo dos sensores.")
 
+            failed_sensor = EXAMPLE | {"luminosidade": -1.0}
+            accepted = client.post(f"{api_url}{path}", json=failed_sensor)
+            require(accepted.status_code == 201, "A falha do BH1750 descartou a medicao inteira.")
+            failed_measurement = accepted.json()
+            failed_document = collection.find_one({"_id": ObjectId(failed_measurement["id"])})
+            require(failed_document is not None and all(
+                failed_document[key] == value for key, value in failed_sensor.items()
+            ), "Os valores com falha do sensor nao foram preservados no MongoDB.")
+            require(client.get(f"{api_url}/api/medicoes/ultima/").json() == failed_measurement,
+                    "O historico nao preservou a falha numerica do sensor.")
+            partial = client.get(f"{frontend_url}/api/meteora").json()["station"]
+            require(partial["status"] == "ready" and partial["data"]["illuminance"] is None,
+                    "O frontend nao isolou a falha de luminosidade.")
+            for field, alias in {
+                "temperatura": "temperature", "umidade": "humidity", "pressao": "pressure",
+            }.items():
+                require(partial["data"][alias] == EXAMPLE[field],
+                        f"A falha do BH1750 descartou a leitura de {field}.")
+
+            collection.delete_one({"_id": failed_document["_id"]})
             collection.delete_one({"_id": document["_id"]})
             require(client.get(f"{api_url}/api/medicoes/").json() == [], "Historico vazio incorreto.")
             require(client.get(f"{api_url}/api/station/latest").status_code == 204, "A limpeza causou erro na ultima leitura.")
@@ -200,6 +220,7 @@ def validate_integration(settings: Settings) -> dict:
                 "firmware_sha256": firmware_hash, "payload_firmware": json.loads(body),
                 "checks": ["contrato_firmware", "post_201", "mongo_bson_utc", "indice_timestamp",
                            "historico", "ultima_medicao", "frontend_quatro_campos", "pagina",
+                           "falha_bh1750_preserva_outros_sensores",
                            "registro_sem_timestamp", "retorno_204_apos_limpeza"],
                 "hardware_tested": False,
             }

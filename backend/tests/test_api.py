@@ -41,9 +41,33 @@ def test_rejects_invalid_types_and_nonfinite_values(client, database, payload, f
     assert database.medicoes.count_documents({}) == 0
 
 
-@pytest.mark.parametrize("patch", [{"umidade": -1}, {"umidade": 101}, {"pressao": -1}, {"luminosidade": -1}, {"timestamp": "2000-01-01T00:00:00Z"}])
-def test_rejects_ranges_and_client_timestamp(client, payload, patch):
-    assert client.post("/api/medicoes/", json=payload | patch).status_code == 422
+@pytest.mark.parametrize("patch", [
+    {"umidade": -1}, {"umidade": 101}, {"pressao": -1},
+    {"luminosidade": -1}, {"luminosidade": -2},
+    {"umidade": -1, "pressao": -1, "luminosidade": -1},
+])
+def test_sensor_error_numbers_are_preserved_without_losing_other_readings(
+    client, database, payload, patch
+):
+    readings = payload | patch
+    response = client.post("/api/medicoes/", json=readings)
+    assert response.status_code == 201
+    assert all(response.json()[key] == value for key, value in readings.items())
+    document = database.medicoes.find_one()
+    assert all(document[key] == value for key, value in readings.items())
+    assert client.get("/api/medicoes/ultima/").json() == response.json()
+    assert client.get("/api/medicoes/").json() == [response.json()]
+    station = client.get("/api/station/latest").json()
+    for field, alias in {
+        "temperatura": "temperature", "umidade": "humidity",
+        "pressao": "pressure", "luminosidade": "illuminance",
+    }.items():
+        assert station[alias] == readings[field]
+    assert station["minimum"] == station["maximum"] == readings["temperatura"]
+
+
+def test_rejects_client_timestamp(client, payload):
+    assert client.post("/api/medicoes/", json=payload | {"timestamp": "2000-01-01T00:00:00Z"}).status_code == 422
 
 
 def test_rejects_malformed_json_and_nonobject_body(client):
