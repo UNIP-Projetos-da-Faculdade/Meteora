@@ -2,7 +2,7 @@ import type { Resource } from "@/types/meteora";
 
 /**
  * CONEXÃO COM A API DO BACKEND PYTHON.
- * Configure METEORA_STATION_URL e METEORA_FORECAST_URL em .env.local.
+ * Configure METEORA_STATION_URL em .env.local.
  * A rota src/app/api/meteora/route.ts chama esta função somente no servidor.
  * Ajuste aqui autenticação, timeout e cabeçalhos; adapte os campos em contracts.ts.
  * URLs e token não são enviados ao navegador (não usar prefixo NEXT_PUBLIC_).

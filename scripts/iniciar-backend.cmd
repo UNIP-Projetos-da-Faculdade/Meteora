@@ -1,6 +1,6 @@
 @echo off
 setlocal
-cd /d "%~dp0backend"
+cd /d "%~dp0..\backend"
 if not exist ".venv\Scripts\python.exe" goto preparar
 if not exist ".env" goto preparar
 ".venv\Scripts\python.exe" -m scripts.verificar_ambiente
@@ -12,8 +12,8 @@ echo Mantenha esta janela aberta. Para encerrar, pressione Ctrl+C.
 if errorlevel 1 goto erro
 exit /b 0
 :preparar
-echo Execute preparar.cmd na raiz do projeto primeiro.
+echo Execute scripts\preparar.cmd primeiro.
 :erro
 echo Nao foi possivel iniciar o backend. Confira a mensagem acima.
-pause
+if not defined METEORA_SEM_PAUSA pause
 exit /b 1

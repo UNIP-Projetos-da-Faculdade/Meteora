@@ -202,12 +202,12 @@ O hardware físico continua necessário para validar sensores, Wi-Fi e acesso pe
 
 ### Simulador contínuo e limpeza dos testes
 
-Com a API aberta, na raiz do repositório execute `simular-dados.cmd`, ou, em
+Com a API aberta, na raiz do repositório execute `scripts/simular-dados.cmd`, ou, em
 `backend/`, `.\.venv\Scripts\python.exe -m scripts.simular_esp32`. O padrão envia
 uma medição a cada 10 segundos até Ctrl+C. Para limitar os envios, acrescente
 `--count 3 --interval 2`. Cada POST usa os quatro campos reais e deve retornar 201.
 
-Depois de parar o simulador, `limpar-dados-simulados.cmd` remove somente os ids
+Depois de parar o simulador, `scripts/limpar-dados-simulados.cmd` remove somente os ids
 registrados por ele em `backend/.cache/simulacoes/`, com a mesma configuração de
 banco. Não remove medições anteriores nem dados enviados pelo hardware. Não
 apague os diários antes de limpar. Os scripts nunca inserem dados fictícios
@@ -229,21 +229,23 @@ O token opcional do frontend não é necessário neste MVP.
 
 O firmware é a fonte de verdade da ingestão. A API oferece uma projeção em inglês
 para manter o contrato existente do dashboard. Não foi encontrado documento de
-requisitos da disciplina no repositório. `frontend/BACKEND.md` foi preservado;
+requisitos da disciplina no repositório. O contrato proposto em `frontend/BACKEND.md`
+mantém a referência de campos opcionais e previsão;
 as diferenças em relação ao contrato proposto estão documentadas aqui:
 
 1. O BH1750 envia lux, mas a tela anterior esperava LDR em %. Foi acrescentado
    `illuminance` aos tipos/parser e o card agora mostra lux. `lightRelative`
    continua aceito pelo parser e retorna `null`; não há conversão arbitrária.
 2. Chuva, ADC de ar e sensação térmica não são fornecidos pelo firmware e
-   retornam `null`. Mínima e máxima usam somente medições persistidas.
+   retornam `null` por compatibilidade; os respectivos elementos foram retirados
+   da tela. Mínima e máxima usam somente medições persistidas.
 3. O documento previa HTTP 204 sem leituras, mas `readBackend` tentava ler JSON
    vazio. O cliente e o parser agora aceitam `ready` com `data: null`.
-4. Os gráficos existentes são de **previsão**, não de histórico dos sensores.
-   Não há provedor configurado: `/api/forecast` retorna 204 sem dados fabricados.
-   Deixe `METEORA_FORECAST_URL` vazio para exibir o estado não configurado ou
-   aponte para esse endpoint para indicar uma fonte disponível sem dados.
-   Previsões horárias/diárias e horários solares dependem de integração futura.
+4. As seções de previsão e horários solares foram retiradas do painel, que usa
+   somente os dados disponíveis na estação. `/api/forecast` continua retornando
+   204 por compatibilidade; o frontend não consulta `METEORA_FORECAST_URL`.
+   Previsões horárias/diárias exigiriam um provedor meteorológico; horários
+   solares uma fonte ou cálculo por localização/data.
 
 O histórico das quatro medições já está disponível em `/api/medicoes/`; a tela
 atual não contém gráfico desse histórico. Não foram adicionados filtros nem
@@ -285,3 +287,9 @@ npx.cmd tsc --noEmit
 ```
 
 As alterações ficam locais para revisão, sem commit ou push automático.
+
+Para repetir todas essas verificações e validar o JSON extraído do firmware
+até o Next.js com MongoDB real, execute `scripts/validar.cmd` na raiz do projeto.
+O comando cria e remove apenas um banco `meteora_test_<uuid>`, escolhe portas
+temporárias e preserva a configuração local e o banco do projeto. Consulte
+o [README da raiz](../README.md) para a sequência e os limites da validação.

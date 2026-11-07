@@ -87,7 +87,7 @@ def simulate(settings: Settings, api_url: str, count: int, interval: float) -> i
         print("\nSimulacao encerrada.", flush=True)
     finally:
         if manifest["ids"]:
-            print("Os dados ficam no MongoDB. Use limpar-dados-simulados.cmd para remover so estes testes.", flush=True)
+            print("Os dados ficam no MongoDB. Use scripts\\limpar-dados-simulados.cmd para remover so estes testes.", flush=True)
     return 0
 
 
@@ -141,7 +141,7 @@ def main() -> int:
     except HTTPError as error:
         print(f"A API retornou HTTP {error.code}. Confira a janela do backend e /api/health/.")
     except (URLError, TimeoutError, ConnectionError):
-        print("Nao foi possivel acessar a API. Inicie iniciar-backend.cmd e tente novamente.")
+        print("Nao foi possivel acessar a API. Inicie scripts\\iniciar-backend.cmd e tente novamente.")
     except PyMongoError:
         print("Nao foi possivel acessar o MongoDB. Confira o servico e backend/.env.")
     except (ValueError, KeyError, OSError):

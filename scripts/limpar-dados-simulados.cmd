@@ -1,5 +1,5 @@
 @echo off
 setlocal
 cd /d "%~dp0"
-call simular-dados.cmd --limpar
+call "%~dp0simular-dados.cmd" --limpar
 exit /b %errorlevel%

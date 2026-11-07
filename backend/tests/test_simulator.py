@@ -65,7 +65,7 @@ def test_simulator_explains_when_backend_is_not_running(monkeypatch, capsys):
     monkeypatch.setattr(simular_esp32, "simulate", unavailable)
     monkeypatch.setattr(sys, "argv", ["simular_esp32", "--count", "1"])
     assert simular_esp32.main() == 1
-    assert "Inicie iniciar-backend.cmd" in capsys.readouterr().out
+    assert "Inicie scripts\\iniciar-backend.cmd" in capsys.readouterr().out
 
 
 @pytest.mark.parametrize("interval", ["0", "-1", "nan", "inf"])

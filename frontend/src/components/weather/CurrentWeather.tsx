@@ -12,7 +12,6 @@ type CurrentWeatherProps = {
   description?: string;
   maximum?: number | null;
   minimum?: number | null;
-  feelsLike?: number | null;
 };
 
 export default function CurrentWeather({
@@ -21,7 +20,6 @@ export default function CurrentWeather({
   description,
   maximum,
   minimum,
-  feelsLike,
 }: CurrentWeatherProps) {
   return (
     <section
@@ -167,7 +165,6 @@ export default function CurrentWeather({
               {formatNumber(minimum)}°
             </span>}
 
-            {feelsLike != null && <span>Sensação térmica de {formatNumber(feelsLike)}°</span>}
           </div>
         </div>
       </div>

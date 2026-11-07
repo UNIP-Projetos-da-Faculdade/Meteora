@@ -19,8 +19,9 @@ Compass é opcional e serve para visualizar os dados.
 Copie/clone o projeto completo para esse computador. Não copie `.venv` ou
 `node_modules` de outro computador: o passo seguinte cria as dependências locais.
 
-Abra a pasta do projeto, onde estão `frontend`, `backend` e os arquivos `.cmd`.
-Clique duas vezes em **`preparar.cmd`** e espere aparecer **Preparacao concluida**.
+Abra a pasta `scripts/` dentro do projeto: os arquivos `.cmd` estão reunidos ali.
+Os comandos PowerShell deste guia partem da raiz do projeto.
+Clique duas vezes em **`scripts/preparar.cmd`** e espere aparecer **Preparacao concluida**.
 Esse passo precisa de internet e pode demorar na primeira execução.
 
 Ele instala as dependências e cria estes arquivos, sem sobrescrever configurações
@@ -48,12 +49,12 @@ METEORA_API_TOKEN=
 
 URI e nome do banco são obrigatórios no ambiente; o código Python não define
 valores padrão para eles. Os arquivos locais não vão para o Git. Por isso, em
-outro computador, execute `preparar.cmd` novamente e ajuste os arquivos locais.
+outro computador, execute `scripts/preparar.cmd` novamente e ajuste os arquivos locais.
 Reinicie backend e frontend se editar os respectivos arquivos `.env`.
 
 ## 2. Abrir o backend
 
-Clique duas vezes em **`iniciar-backend.cmd`** e mantenha a janela aberta.
+Clique duas vezes em **`scripts/iniciar-backend.cmd`** e mantenha a janela aberta.
 
 O comando verifica o MongoDB e mostra algo como:
 
@@ -75,19 +76,19 @@ Se isso não funcionar, resolva essa etapa antes de conectar o ESP32. Em
 
 ## 3. Abrir o frontend
 
-Clique duas vezes em **`iniciar-frontend.cmd`** e mantenha essa segunda janela
+Clique duas vezes em **`scripts/iniciar-frontend.cmd`** e mantenha essa segunda janela
 aberta. Quando aparecer que o servidor está pronto, abra:
 
 **<http://localhost:3000>**
 
 Se ainda não houver medições, o site informa que está aguardando a estação.
-Chuva e sensor de ar ficam sem leitura porque o firmware não tem esses sensores.
-As seções de previsão também ficam vazias: elas dependem de um provedor
-meteorológico, não dos valores enviados pelo ESP32 ou pelo simulador.
+O painel mostra temperatura, umidade, pressão e luminosidade, além dos extremos
+observados do dia. Chuva, sensor de ar, previsões e horários solares foram
+retirados da tela porque não são fornecidos pelos sensores atuais.
 
 ## 4. Colocar dados fictícios no MongoDB e no site
 
-Com as duas janelas anteriores abertas, clique duas vezes em **`simular-dados.cmd`**.
+Com as duas janelas anteriores abertas, clique duas vezes em **`scripts/simular-dados.cmd`**.
 
 Uma terceira janela enviará uma medição a cada 10 segundos. Ela mostrará:
 
@@ -115,7 +116,7 @@ site sinaliza a medição como desatualizada; isso é esperado.
 Para enviar só três medições, abra PowerShell na raiz do projeto e execute:
 
 ```powershell
-.\simular-dados.cmd --count 3 --interval 2
+.\scripts\simular-dados.cmd --count 3 --interval 2
 ```
 
 ### Ver os dados no MongoDB Compass
@@ -131,7 +132,7 @@ O `id` retornado pela API corresponde ao `_id` do documento no Compass.
 
 ### Remover apenas os dados fictícios deste simulador
 
-Primeiro pare o simulador com Ctrl+C. Depois execute **`limpar-dados-simulados.cmd`**.
+Primeiro pare o simulador com Ctrl+C. Depois execute **`scripts/limpar-dados-simulados.cmd`**.
 
 O simulador guarda os ids que criou em `backend/.cache/simulacoes/`. A limpeza
 remove somente esses ids, na mesma configuração de banco. Medições que já
@@ -160,7 +161,7 @@ alcançam usando apenas esses endereços locais.
 
 ### Descobrir e testar o endereço do backend
 
-No computador que executa `iniciar-backend.cmd`, abra o Prompt de Comando e
+No computador que executa `scripts/iniciar-backend.cmd`, abra o Prompt de Comando e
 execute `ipconfig`. Procure o **Endereço IPv4** da conexão Wi-Fi/Ethernet em uso,
 por exemplo `192.168.1.50`. Não use um endereço de VPN ou adaptador desconectado.
 
@@ -215,22 +216,28 @@ compilação com a placa/bibliotecas escolhidas precisam ser feitos na Arduino I
 
 | O que aparece | O que conferir |
 | --- | --- |
-| Python ou Node não encontrado | Reabra o terminal após instalar; execute `preparar.cmd` |
+| Python ou Node não encontrado | Reabra o terminal após instalar; execute `scripts/preparar.cmd` |
 | Não foi possível acessar MongoDB | Abra Serviços do Windows, encontre MongoDB e inicie; confira `backend/.env` |
 | Porta 8000 ou 3000 em uso | Feche a janela anterior desse servidor; mantenha uma instância de cada |
-| Simulador não acessa a API | Abra `iniciar-backend.cmd` antes de `simular-dados.cmd` |
+| Simulador não acessa a API | Abra `scripts/iniciar-backend.cmd` antes de `scripts/simular-dados.cmd` |
 | HTTP 503 | A API está acessível, mas o MongoDB não está disponível |
 | HTTP 422 | Confira os quatro números do payload; não use texto, null ou valores inválidos |
 | Site sem dados apesar do HTTP 201 | Confira `.env.local`, reinicie o frontend e abra `/api/meteora` |
-| Documento no Compass, mas site aguardando leitura | Documentos sem `timestamp` BSON ou com medições incompletas são preservados e ignorados. Use `simular-dados.cmd` para gravar uma medição completa pela API |
+| Documento no Compass, mas site aguardando leitura | Documentos sem `timestamp` BSON ou com medições incompletas são preservados e ignorados. Use `scripts/simular-dados.cmd` para gravar uma medição completa pela API |
 | Funciona no PC, mas o ESP32 não alcança | Confira IP, mesma rede, teste de `/api/health/` em outro aparelho e firewall |
 | Serial sem mostrar Wi-Fi conectado | A pessoa com a placa deve conferir nome/senha/rede nos campos existentes do firmware |
 | Leitura inválida no Serial | Confira ligação, alimentação e presença dos quatro valores dos sensores |
-| Previsão ou chuva vazia | Esperado: esses dados não são produzidos pelos sensores atuais nem pelo simulador |
+| Não há chuva ou previsão na tela | Esperado: o painel mostra somente as medições disponíveis no firmware |
 
 Para encerrar o projeto, use Ctrl+C nas janelas do simulador, frontend e backend.
 O serviço MongoDB pode continuar em execução. Para abrir novamente no dia
-seguinte, execute os dois arquivos `iniciar-*.cmd`; não é preciso preparar tudo
+seguinte, execute os dois arquivos `scripts/iniciar-*.cmd`; não é preciso preparar tudo
 ou instalar as dependências novamente.
 
-Detalhes da API e testes automatizados: [backend/README.md](backend/README.md).
+Para executar a validação completa, use `scripts/validar.cmd`. Ela confere o
+contrato do `.ino`, testa a API com MongoDB real e consulta o Next.js usando
+um banco e servidores temporários. Não usa placa física nem altera o banco
+do projeto. O resultado fica em `backend/.cache/ultima-validacao.json`.
+
+Visão geral: [README.md](README.md). Detalhes da API e testes automatizados:
+[backend/README.md](backend/README.md).

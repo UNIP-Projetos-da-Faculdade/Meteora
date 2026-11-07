@@ -24,16 +24,13 @@ os estados de espera. Não há dados meteorológicos fictícios na aplicação.
 
 **A conexão com a API Python fica em `src/lib/backend.ts`.**
 
-1. Defina as URLs completas em `METEORA_STATION_URL` e `METEORA_FORECAST_URL`, no `.env.local`.
+1. Defina a URL completa em `METEORA_STATION_URL`, no `.env.local`.
 2. Confira o contrato proposto em [BACKEND.md](./BACKEND.md).
 3. Se o JSON Python tiver outros nomes, adapte-o em `src/lib/contracts.ts`.
 4. Reinicie o Next.js após alterar variáveis de ambiente.
 
 ```text
-ESP32 → backend Python ─────┐
-Fonte de previsão → backend ┤
-                           ↓
-src/lib/backend.ts → /api/meteora → useDashboard → componentes
+ESP32 → backend Python → src/lib/backend.ts → /api/meteora → useDashboard → componentes
 ```
 
 As URLs e o token ficam no servidor Next.js, sem expor credenciais ao navegador
@@ -52,7 +49,7 @@ src/
 ├── components/
 │   ├── Dashboard.tsx           # Compõe seções e informa dados antigos/erros
 │   ├── ui/                     # Cabeçalho, cartões e estados vazios
-│   ├── weather/                # Atual, previsão horária, diária e destaque
+│   ├── weather/                # Temperatura atual e componentes de previsão fora do painel
 │   └── station/                # Medições locais do ESP32
 ├── hooks/useDashboard.ts       # Consulta, repetição e cancelamento de requisições
 ├── lib/
@@ -64,14 +61,22 @@ src/
 
 O painel consulta a cada 30 segundos enquanto a aba está visível e ao retornar à aba.
 O botão “Atualizar dados” permite uma nova tentativa manual.
-Leituras da estação com mais de 90 segundos e previsões com mais de 6 horas são
-identificadas como desatualizadas. Falhas preservam a última resposta válida em memória,
+Leituras da estação com mais de 90 segundos são identificadas como desatualizadas.
+Falhas preservam a última resposta válida em memória,
 identificando-a na tela. Não há persistência local de medições.
 
-O seletor Hoje/Amanhã usa o horário de Brasília. Curvas e barras são SVG/CSS,
-calculadas com os dados recebidos. Campos ausentes aparecem como `—`; zero é válido.
-O sensor de ar exibe ADC bruto, sem inferir qualidade do ar. A luminosidade do
-BH1750 é recebida em `illuminance` e exibida em lux, sem converter para percentual.
+O painel mostra os quatro valores enviados pelo firmware: temperatura e umidade
+(DHT22), pressão (BMP280) e luminosidade (BH1750). Mínima e máxima são calculadas
+pelo backend com medições do dia da leitura. Horários usam Brasília; campos
+ausentes aparecem como `—` e zero é válido. A luminosidade é recebida em
+`illuminance` e exibida em lux, sem converter para percentual.
+
+Chuva, sensor de ar, sensação térmica, previsões e horários solares não aparecem
+na tela. Não são enviados pelos sensores atuais. Previsões exigiriam um provedor
+meteorológico e horários solares uma fonte ou cálculo por localização/data.
+O painel não consulta `METEORA_FORECAST_URL`; o campo `forecast` permanece
+`unconfigured` no envelope de `/api/meteora` para manter o contrato existente.
+Os parsers e componentes de previsão continuam disponíveis fora do painel.
 O backend FastAPI está documentado em [../backend/README.md](../backend/README.md).
 O cenário noturno é decorativo e acompanha a identidade visual fixa do projeto.
 
