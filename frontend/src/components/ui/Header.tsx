@@ -33,13 +33,6 @@ export default function Header() {
             </a>
 
             <a
-              href="#previsao"
-              className="rounded-sm transition-colors hover:text-meteora-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-meteora-accent"
-            >
-              Previsão
-            </a>
-
-            <a
               href="#estacao"
               className="rounded-sm transition-colors hover:text-meteora-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-meteora-accent"
             >

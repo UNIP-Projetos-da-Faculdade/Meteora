@@ -2,7 +2,12 @@
 
 **Arquivo responsável pela conexão: `src/lib/backend.ts`.**
 
-Este é o contrato proposto pelo frontend, ainda sem um backend real conectado.
+Este arquivo registra o contrato originalmente proposto pelo frontend.
+O painel atual está integrado ao FastAPI e mostra apenas temperatura, umidade,
+pressão, luminosidade em lux (`illuminance`) e os extremos observados do dia.
+Os campos opcionais e o contrato de previsão abaixo foram preservados como
+referência; as seções de previsão, chuva e sensor de ar foram retiradas da tela.
+`METEORA_FORECAST_URL` não é consultada pelo painel atual.
 `src/types/meteora.ts` documenta os tipos; `src/lib/contracts.ts` valida o JSON
 em tempo de execução. Caso a API já tenha outro formato, adapte os parsers nesse arquivo.
 Os componentes visuais não precisam conhecer as URLs nem o formato original da API.

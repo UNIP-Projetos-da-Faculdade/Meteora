@@ -2,7 +2,7 @@ import type { Resource } from "@/types/meteora";
 
 /**
  * CONEXÃO COM A API DO BACKEND PYTHON.
- * Configure METEORA_STATION_URL e METEORA_FORECAST_URL em .env.local.
+ * Configure METEORA_STATION_URL em .env.local.
  * A rota src/app/api/meteora/route.ts chama esta função somente no servidor.
  * Ajuste aqui autenticação, timeout e cabeçalhos; adapte os campos em contracts.ts.
  * URLs e token não são enviados ao navegador (não usar prefixo NEXT_PUBLIC_).
@@ -21,6 +21,8 @@ export async function readBackend<T>(url: string | undefined, parse: (value: unk
       },
     });
     if (!response.ok) throw new Error("Backend indisponível");
+    // API disponível, mas ainda sem medição ou fonte de previsão.
+    if (response.status === 204) return { status: "ready", data: null };
     return { status: "ready", data: parse(await response.json()) };
   } catch {
     // Mantém URLs, tokens e detalhes internos de erros fora da resposta pública.

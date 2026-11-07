@@ -16,6 +16,13 @@ test("preserva zero e normaliza leituras ausentes para null", () => {
   assert.equal(value.rain24h, 0);
   assert.equal(value.pressure, null);
   assert.equal(value.feelsLike, null);
+  assert.equal(value.illuminance, null);
+});
+
+test("preserva a iluminância do BH1750 em lux, inclusive zero", () => {
+  assert.equal(parseStation({ ...station, illuminance: 350.8 }).illuminance, 350.8);
+  assert.equal(parseStation({ ...station, illuminance: 0 }).illuminance, 0);
+  assert.throws(() => parseStation({ ...station, illuminance: -1 }));
 });
 
 test("rejeita medições malformadas e datas sem fuso", () => {
@@ -56,6 +63,7 @@ test("mantém estados das fontes independentes e rejeita envelopes inválidos", 
   assert.equal(result.station.data.temperature, 0);
   assert.equal(result.forecast.status, "error");
   assert.throws(() => parseDashboard({ station: { status: "ready", data: null } }));
+  assert.equal(parseDashboard({ station: { status: "ready", data: null }, forecast: { status: "unconfigured", data: null } }).station.data, null);
 });
 
 test("não chama a rede enquanto o endpoint estiver vazio", async (t) => {
@@ -78,6 +86,13 @@ test("HTTP inválido, JSON incorreto e timeout viram erros controlados", async (
     fetch.mock.mockImplementation(implementation);
     assert.deepEqual(await readBackend("http://localhost:8000/station", parseStation), { status: "error", data: null });
   }
+});
+
+test("HTTP 204 indica uma fonte disponível ainda sem dados", async (t) => {
+  t.mock.method(globalThis, "fetch", async () => new Response(null, { status: 204 }));
+  const result = await readBackend("http://localhost:8000/station", parseStation);
+  assert.deepEqual(result, { status: "ready", data: null });
+  assert.equal(parseDashboard({ station: result, forecast: { status: "unconfigured", data: null } }).station.data, null);
 });
 
 test("uma falha na previsão não descarta a leitura da estação", async (t) => {
