@@ -7,10 +7,11 @@ export type WeatherCondition =
 export type StationReading = {
   // Instante da medição no ESP32/backend, em ISO 8601 com fuso (Z ou -03:00).
   observedAt: string;
-  // °C, %, hPa, mm nas últimas 24 h, % de luz relativa e contagem ADC, respectivamente.
+  // °C, %, hPa, lux, mm nas últimas 24 h, % de luz relativa e contagem ADC, respectivamente.
   temperature: number | null;
   humidity: number | null;
   pressure: number | null;
+  illuminance: number | null; // BH1750, em lux; não é um percentual.
   rain24h: number | null;
   lightRelative: number | null;
   airRaw: number | null;
@@ -45,7 +46,7 @@ export type Forecast = {
 };
 
 export type Resource<T> = {
-  // unconfigured: URL não definida; error: requisição/JSON inválido; ready: resposta válida.
+  // unconfigured: URL não definida; error: requisição/JSON inválido; ready: JSON válido ou 204 sem dados.
   // No navegador, data pode manter a última resposta válida durante uma falha temporária.
   status: "ready" | "unconfigured" | "error";
   data: T | null;

@@ -53,6 +53,7 @@ export function parseStation(value: unknown): StationReading {
     temperature: number(data.temperature),
     humidity: number(data.humidity, 0, 100),
     pressure: number(data.pressure, 0),
+    illuminance: number(data.illuminance, 0),
     rain24h: number(data.rain24h, 0),
     lightRelative: number(data.lightRelative, 0, 100),
     airRaw: number(data.airRaw, 0),
@@ -103,7 +104,7 @@ export function parseDashboard(value: unknown): DashboardResponse {
   const data = object(value);
   function resource<T>(value: unknown, parse: (value: unknown) => T): Resource<T> {
     const item = object(value);
-    if (item.status === "ready") return { status: "ready", data: parse(item.data) };
+    if (item.status === "ready") return { status: "ready", data: item.data === null ? null : parse(item.data) };
     if (item.status === "error" || item.status === "unconfigured") return { status: item.status, data: null };
     throw new Error("Estado de integração inválido");
   }

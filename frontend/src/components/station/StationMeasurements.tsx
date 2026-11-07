@@ -11,7 +11,7 @@ export default function StationMeasurements({ resource, stale, loading }: { reso
     { label: "Umidade", value: data?.humidity, unit: "%", icon: faDroplet, detail: "Umidade relativa", digits: 0 },
     { label: "Pressão", value: data?.pressure, unit: " hPa", icon: faGauge, detail: "Pressão atmosférica", digits: 0 },
     { label: "Chuva · 24 h", value: data?.rain24h, unit: " mm", icon: faCloudRain, detail: "Precipitação acumulada", digits: 1 },
-    { label: "Luz relativa", value: data?.lightRelative, unit: "%", icon: faSun, detail: "LDR · sem conversão em lux", digits: 0 },
+    { label: "Luminosidade", value: data?.illuminance, unit: " lux", icon: faSun, detail: "Iluminância · BH1750", digits: 1 },
     { label: "Sensor de ar", value: data?.airRaw, unit: " ADC", icon: faWind, detail: "Leitura bruta · sem índice de qualidade", digits: 0 },
   ];
   return <Panel id="estacao" labelledBy="station-title">

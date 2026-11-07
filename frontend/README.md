@@ -1,5 +1,8 @@
 # Meteora
 
+Para iniciar o projeto completo no Windows e testar sem ESP32, siga
+[COMECAR-AQUI.md](../COMECAR-AQUI.md) na raiz do repositório.
+
 Site para acompanhar os dados de uma estação com ESP32 em São José do Rio Preto, SP.
 Next.js App Router, React, TypeScript, Tailwind v4, Manrope e Font Awesome gratuito.
 Tema noturno fixo, logo e favicon locais; layout responsivo baseado no protótipo.
@@ -67,7 +70,9 @@ identificando-a na tela. Não há persistência local de medições.
 
 O seletor Hoje/Amanhã usa o horário de Brasília. Curvas e barras são SVG/CSS,
 calculadas com os dados recebidos. Campos ausentes aparecem como `—`; zero é válido.
-O sensor de ar exibe ADC bruto, sem inferir qualidade do ar. Luz relativa não é lux.
+O sensor de ar exibe ADC bruto, sem inferir qualidade do ar. A luminosidade do
+BH1750 é recebida em `illuminance` e exibida em lux, sem converter para percentual.
+O backend FastAPI está documentado em [../backend/README.md](../backend/README.md).
 O cenário noturno é decorativo e acompanha a identidade visual fixa do projeto.
 
 ## Verificação
