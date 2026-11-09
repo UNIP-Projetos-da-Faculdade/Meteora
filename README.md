@@ -1,236 +1,188 @@
-# 🌤️ Meteora
+<div align="center">
+<h1>🌤️ Meteora</h1>
+  <p><strong>Uma estação meteorológica inteligente, do sensor ao dashboard.</strong></p>
 
-**Estação Meteorológica Inteligente com IoT**
+  <p>
+    <a href="https://github.com/UNIP-Projetos-da-Faculdade/Meteora/releases/tag/v1.0.0"><img alt="Release" src="https://img.shields.io/github/v/release/UNIP-Projetos-da-Faculdade/Meteora?style=flat-square&label=release" /></a>
+    <a href="LICENSE"><img alt="Licença MIT" src="https://img.shields.io/badge/license-MIT-2563eb?style=flat-square" /></a>
+    <img alt="Versão acadêmica concluída" src="https://img.shields.io/badge/status-vers%C3%A3o%20acad%C3%AAmica%20conclu%C3%ADda-15803d?style=flat-square" />
+  </p>
 
-![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-Frontend-000000?logo=nextdotjs&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb&logoColor=white)
-![ESP32](https://img.shields.io/badge/ESP32-IoT-E7352C?logo=espressif&logoColor=white)
-![License](https://img.shields.io/badge/License-Not%20specified-lightgrey)
+  <p>
+    <img alt="Python" src="https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python&logoColor=white" />
+    <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square&logo=fastapi&logoColor=white" />
+    <img alt="Next.js" src="https://img.shields.io/badge/Next.js-Frontend-000000?style=flat-square&logo=nextdotjs&logoColor=white" />
+    <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-Frontend-3178C6?style=flat-square&logo=typescript&logoColor=white" />
+    <img alt="MongoDB" src="https://img.shields.io/badge/MongoDB-Database-47A248?style=flat-square&logo=mongodb&logoColor=white" />
+    <img alt="ESP32" src="https://img.shields.io/badge/ESP32-IoT-E7352C?style=flat-square&logo=espressif&logoColor=white" />
+  </p>
 
-O **Meteora** é um projeto acadêmico de Internet das Coisas (IoT) desenvolvido para monitoramento de condições meteorológicas por meio de sensores conectados a um microcontrolador ESP32.
-
-O sistema coleta informações ambientais, transmite os dados por Wi-Fi para uma API REST, armazena as medições no MongoDB e disponibiliza os resultados em um dashboard web interativo.
-
-O projeto integra conceitos de **sistemas embarcados, desenvolvimento full-stack, comunicação entre dispositivos e persistência de dados**, com foco em aplicações para cidades inteligentes.
-
----
-
-## 📑 Sumário
-
-- [Sobre o projeto](#-sobre-o-projeto)
-- [Tecnologias utilizadas](#-tecnologias-utilizadas)
-- [Arquitetura do sistema](#-arquitetura-do-sistema)
-- [Sensores e medições](#-sensores-e-medições)
-- [Estrutura do repositório](#-estrutura-do-repositório)
-- [Instalação e execução](#-instalação-e-execução)
-- [Simulação de dados](#-simulação-de-dados)
-- [Integração com ESP32](#-integração-com-esp32)
-- [API REST](#-api-rest)
-- [Testes e validação](#-testes-e-validação)
-- [Documentação](#-documentação)
-- [Contexto acadêmico](#-contexto-acadêmico)
+  <p>
+    <a href="#-vis%C3%A3o-geral">Visão geral</a> ·
+    <a href="#-arquitetura">Arquitetura</a> ·
+    <a href="#-executando-localmente">Instalação</a> ·
+    <a href="#-testes-e-valida%C3%A7%C3%A3o">Testes</a> ·
+    <a href="COMECAR-AQUI.md">Guia completo</a> ·
+    <a href="https://github.com/UNIP-Projetos-da-Faculdade/Meteora/releases/tag/v1.0.0">Release v1.0.0</a>
+  </p>
+</div>
 
 ---
 
-## 🎯 Sobre o projeto
+## 🎯 Visão geral
 
-O Meteora tem como objetivo desenvolver uma estação meteorológica capaz de coletar, processar, armazenar e apresentar informações ambientais de maneira automatizada.
+O **Meteora** é uma estação meteorológica inteligente desenvolvida como projeto acadêmico de **Internet das Coisas (IoT)**. Sensores conectados a um **ESP32** coletam informações ambientais, que são transmitidas por Wi-Fi para uma **API REST em FastAPI**, armazenadas no **MongoDB** e apresentadas em um **dashboard responsivo desenvolvido com Next.js e TypeScript**.
 
-### Funcionalidades
+A solução integra sistemas embarcados, comunicação entre dispositivos, desenvolvimento web full-stack e persistência de dados, em um cenário de monitoramento ambiental relacionado ao conceito de **cidades inteligentes**.
 
-- 🌡️ Monitoramento de temperatura em graus Celsius.
-- 💧 Monitoramento da umidade relativa do ar.
-- 🌬️ Medição da pressão atmosférica.
-- ☀️ Monitoramento da luminosidade ambiente.
-- 📡 Transmissão de dados via Wi-Fi utilizando HTTP.
-- 🗄️ Armazenamento das medições no MongoDB.
-- 📊 Dashboard responsivo com atualização periódica.
-- 📈 Exibição dos valores mínimos e máximos do dia.
-- ⏱️ Identificação de medições desatualizadas.
-- 🧪 Simulação de sensores para testes sem hardware físico.
+### ✨ O que o sistema faz
 
-> **Escopo atual:** o dashboard apresenta quatro variáveis ambientais. Monitoramento de chuva, qualidade do ar e previsões meteorológicas não fazem parte desta implementação.
+| Recurso | Descrição |
+| --- | --- |
+| 🌡️ **Temperatura e umidade** | Monitora as condições do ambiente com o sensor DHT22. |
+| 🌬️ **Pressão atmosférica** | Apresenta medições do BMP280 em hPa. |
+| ☀️ **Luminosidade** | Exibe leituras do BH1750 em lux. |
+| 📡 **Comunicação IoT** | Envia medições via Wi-Fi e HTTP para o backend. |
+| 📊 **Dashboard web** | Mostra as leituras com atualização periódica e layout responsivo. |
+| 📈 **Indicadores diários** | Apresenta valores mínimos e máximos do dia. |
+| ⏱️ **Leitura desatualizada** | Sinaliza a ausência de novas medições após 90 segundos. |
+| 🧪 **Modo de simulação** | Permite testar API, banco de dados e dashboard sem o ESP32 físico. |
 
-## 🛠️ Tecnologias utilizadas
+> **Escopo da v1.0.0:** o dashboard cobre temperatura, umidade, pressão atmosférica e luminosidade. Previsão do tempo, chuva e qualidade do ar **não** fazem parte desta versão.
 
-| Camada | Tecnologia | Responsabilidade |
-|---|---|---|
-| Hardware | ESP32 | Controle dos sensores e comunicação Wi-Fi |
-| Firmware | Arduino / C++ | Coleta e transmissão das medições |
-| Backend | Python + FastAPI | API REST e processamento de dados |
-| Banco de dados | MongoDB | Persistência das medições |
-| Frontend | Next.js + TypeScript | Interface web e visualização |
-| Comunicação | HTTP + JSON | Integração entre os componentes |
+<!-- CAPTURAS REAIS DO PROJETO
+Quando houver screenshots reais, salve as imagens em docs/assets/ e substitua este comentário por:
 
-## 🏗️ Arquitetura do sistema
+## 🖥️ Demonstração
 
-O Meteora utiliza uma arquitetura dividida em três componentes principais: **dispositivo IoT, servidor backend e aplicação frontend**.
+<p align="center">
+  <img src="docs/assets/dashboard.png" alt="Dashboard do Meteora em funcionamento" width="900" />
+</p>
+
+Se houver foto autorizada da montagem física, adicione-a aqui com uma legenda clara.
+Não utilize mockups como se fossem capturas reais do sistema.
+-->
+
+## 🏗️ Arquitetura
 
 ```mermaid
-flowchart TD
-    A["ESP32 + Sensores"] -->|"Wi-Fi / HTTP POST"| B["FastAPI"]
-    B -->|"Persistência"| C[("MongoDB")]
-    D["Dashboard Next.js"] -->|"HTTP GET"| B
-    B -->|"JSON"| D
+flowchart LR
+    S["Sensores<br/>DHT22 · BMP280 · BH1750"] --> E["ESP32<br/>Arduino / C++"]
+    E -->|"Wi-Fi · HTTP POST"| API["API REST<br/>FastAPI"]
+    API -->|"Grava / consulta"| DB[("MongoDB")]
+    WEB["Dashboard<br/>Next.js · TypeScript"] -->|"HTTP GET"| API
+    API -->|"JSON"| WEB
 ```
 
-### Fluxo de funcionamento
+**Fluxo de dados:** o ESP32 lê os sensores e envia medições ao backend a cada **10 segundos**. A API valida e persiste os dados no MongoDB. O dashboard consulta as informações periodicamente, em intervalos de até **30 segundos**.
 
-1. O **ESP32** realiza a leitura dos sensores ambientais.
-2. O firmware valida os valores e monta um objeto JSON.
-3. As medições são enviadas por HTTP POST ao backend.
-4. A **FastAPI** valida e armazena os dados no MongoDB.
-5. O **Next.js** consulta a API para obter a última medição.
-6. O dashboard apresenta as informações e os indicadores meteorológicos.
+| Camada | Tecnologias | Papel |
+| --- | --- | --- |
+| Dispositivo IoT | ESP32, Arduino/C++ | Leitura dos sensores e envio por HTTP |
+| Backend | Python 3.12+, FastAPI | Validação, registro e consulta das medições |
+| Banco de dados | MongoDB | Armazenamento das medições |
+| Frontend | Next.js, TypeScript | Interface responsiva e indicadores |
+| Comunicação | Wi-Fi, HTTP, JSON | Integração entre os componentes |
 
-As medições são realizadas a cada **10 segundos**, enquanto o painel consulta novas informações periodicamente, com intervalo de até **30 segundos**.
+📚 **Detalhes técnicos:** [Arquitetura](docs/ARQUITETURA.md) · [Funcionamento](docs/FUNCIONAMENTO.md) · [Integração e dados](docs/INTEGRACAO.md)
 
-Leituras com mais de **90 segundos** são sinalizadas como desatualizadas.
+## 🔌 Sensores e hardware
 
-Para mais detalhes, consulte [Arquitetura do sistema](docs/ARQUITETURA.md).
+| Sensor / componente | Medição ou configuração |
+| --- | --- |
+| **DHT22** | Temperatura (°C) e umidade relativa (%) |
+| **BMP280** | Pressão atmosférica (hPa) |
+| **BH1750** | Luminosidade (lux) |
+| **DHT22 → ESP32** | GPIO 4 |
+| **I²C SDA / SCL** | GPIO 21 / GPIO 22 |
+| **BMP280 (I²C)** | Endereço `0x76` ou `0x77` |
+| **Monitor serial** | 115200 baud |
 
-## 🌡️ Sensores e medições
+O firmware está em [`firmware/sketch_oct31a/sketch_oct31a.ino`](firmware/sketch_oct31a/sketch_oct31a.ino). Para utilizar a placa, configure o **SSID**, a **senha do Wi-Fi** e o **IP do computador que executa a API**. A placa e o servidor precisam estar em uma rede que permita a comunicação entre eles.
 
-| Sensor | Variável | Unidade |
-|---|---|---|
-| DHT22 | Temperatura | °C |
-| DHT22 | Umidade relativa | % |
-| BMP280 | Pressão atmosférica | hPa |
-| BH1750 | Luminosidade | lux |
+Bibliotecas utilizadas: **ESP32 by Espressif Systems**, **DHT sensor library**, **Adafruit Unified Sensor**, **Adafruit BMP280 Library**, **Adafruit BusIO** e **BH1750 by Christopher Laws**.
 
-### Configuração do ESP32
+> A compilação do firmware foi validada; a montagem eletrônica e o funcionamento dos sensores físicos dependem de testes próprios. Não confunda essa validação de software com um teste completo em hardware.
 
-| Componente | Configuração |
-|---|---|
-| DHT22 | GPIO 4 |
-| I²C SDA | GPIO 21 |
-| I²C SCL | GPIO 22 |
-| BMP280 | Endereço 0x76 ou 0x77 |
-| Comunicação | Wi-Fi / HTTP |
-| Monitor Serial | 115200 baud |
+## 🚀 Executando localmente
 
-## 📁 Estrutura do repositório
-
-```text
-Meteora/
-│
-├── backend/                  # API REST, MongoDB e testes
-├── frontend/                 # Dashboard Next.js
-├── firmware/
-│   └── sketch_oct31a/        # Firmware Arduino do ESP32
-│
-├── docs/                     # Documentação técnica
-├── scripts/                  # Scripts de instalação e execução
-│
-├── COMECAR-AQUI.md           # Guia detalhado de configuração
-└── README.md                 # Documentação principal
-```
-
-## 🚀 Instalação e execução
+O fluxo automatizado documentado abaixo é voltado ao **Windows**. Para orientações passo a passo e solução de problemas, consulte [**COMECAR-AQUI.md**](COMECAR-AQUI.md).
 
 ### Pré-requisitos
 
-Para executar o projeto localmente no Windows, instale:
-
 - **Python 3.12+**
 - **Node.js 22.18+**
-- **MongoDB Community Server**
+- **MongoDB Community Server** em execução
 - **Git**
+- **Arduino IDE** (apenas para gravar o firmware no ESP32)
 
-Opcionalmente:
-
-- MongoDB Compass, para visualizar os dados.
-- Arduino IDE, para programar o ESP32.
-
-### 1. Clonar o repositório
+### 1. Clone o projeto
 
 ```bash
-git clone <URL_DO_REPOSITORIO>
+git clone https://github.com/UNIP-Projetos-da-Faculdade/Meteora.git
 cd Meteora
 ```
 
-Substitua `<URL_DO_REPOSITORIO>` pela URL real do projeto.
+### 2. Prepare o ambiente
 
-### 2. Preparar o ambiente
-
-Na raiz do projeto, execute:
+No terminal do Windows, na raiz do repositório:
 
 ```powershell
 .\scripts\preparar.cmd
 ```
 
-O script instala as dependências necessárias e prepara os arquivos de configuração locais.
+O script instala as dependências e prepara os arquivos locais de configuração. Ajuste as variáveis a seguir, conforme necessário:
 
-### 3. Configurar as variáveis de ambiente
+**`backend/.env`**
 
-**Backend — `backend/.env`**
-
-```env
+```dotenv
 MONGODB_URI=mongodb://127.0.0.1:27017
 MONGODB_DATABASE=meteora
 ```
 
-**Frontend — `frontend/.env.local`**
+**`frontend/.env.local`**
 
-```env
+```dotenv
 METEORA_STATION_URL=http://127.0.0.1:8000/api/station/latest
 ```
 
-> Os arquivos `.env` são ignorados pelo Git. Utilize os respectivos `.env.example` como referência.
+> Use os arquivos `.env.example` como referência. Não publique senhas ou credenciais nos arquivos versionados.
 
-### 4. Iniciar o backend
+### 3. Inicie os serviços
+
+Em **terminais separados**, execute:
 
 ```powershell
+# Terminal 1 — API
 .\scripts\iniciar-backend.cmd
 ```
 
-A API estará disponível em:
-
-**http://localhost:8000**
-
-Documentação interativa (Swagger):
-
-**http://localhost:8000/docs**
-
-### 5. Iniciar o frontend
-
-Em outro terminal:
-
 ```powershell
+# Terminal 2 — dashboard
 .\scripts\iniciar-frontend.cmd
 ```
 
-Acesse o dashboard:
+| Serviço | Endereço local |
+| --- | --- |
+| Dashboard | <http://localhost:3000> |
+| API REST | <http://localhost:8000> |
+| Swagger / OpenAPI | <http://localhost:8000/docs> |
+| Health check | <http://localhost:8000/api/health/> |
 
-**http://localhost:3000**
+**O MongoDB precisa estar em execução.** Os terminais do backend e do frontend devem permanecer abertos.
 
-> Mantenha os dois terminais abertos durante a execução. O MongoDB também precisa estar em funcionamento.
+### 4. Simule leituras (sem ESP32)
 
-## 🧪 Simulação de dados
-
-O projeto possui um simulador que permite testar toda a integração sem conectar fisicamente o ESP32.
-
-Com o backend e o frontend em execução:
+Com os serviços em execução:
 
 ```powershell
 .\scripts\simular-dados.cmd
 ```
 
-O simulador envia uma nova medição a cada **10 segundos**.
-
-Para executar somente três medições:
+O simulador envia dados fictícios a cada **10 segundos**, utilizando a mesma rota HTTP do dispositivo. Para realizar apenas três envios:
 
 ```powershell
 .\scripts\simular-dados.cmd --count 3 --interval 2
-```
-
-Os dados podem ser visualizados no MongoDB Compass:
-
-```text
-Database:   meteora
-Collection: medicoes
 ```
 
 Para remover somente as medições registradas pelo simulador:
@@ -239,160 +191,101 @@ Para remover somente as medições registradas pelo simulador:
 .\scripts\limpar-dados-simulados.cmd
 ```
 
-## 🔌 Integração com ESP32
-
-O firmware está localizado em:
-
-```text
-firmware/sketch_oct31a/sketch_oct31a.ino
-```
-
-Antes de gravá-lo na placa, configure:
-
-- O SSID da rede Wi-Fi.
-- A senha da rede Wi-Fi.
-- O endereço IP do computador que executa o backend.
-
-Exemplo de endereço da API:
-
-```text
-http://192.168.1.100:8000/api/medicoes/
-```
-
-O endereço acima é ilustrativo. Utilize o IPv4 real do computador na rede.
-
-### Bibliotecas necessárias
-
-Instale na Arduino IDE:
-
-- ESP32 by Espressif Systems
-- DHT sensor library by Adafruit
-- Adafruit Unified Sensor
-- Adafruit BMP280 Library
-- Adafruit BusIO
-- BH1750 by Christopher Laws
-
-Após gravar o firmware, abra o Monitor Serial em **115200 baud** para acompanhar as leituras e as respostas HTTP.
-
-Uma transmissão bem-sucedida retorna:
-
-```text
-Codigo HTTP: 201
-Medicao salva com sucesso!
-```
-
-**Importante:** o ESP32 e o computador que executa o backend devem estar em uma rede que permita a comunicação entre ambos. A integração física depende também da montagem correta do circuito e dos sensores.
+Os registros são armazenados no MongoDB, no banco `meteora` e na coleção `medicoes`.
 
 ## 🌐 API REST
 
-O backend disponibiliza endpoints para recebimento, consulta e acompanhamento das medições.
+| Método | Endpoint | Finalidade |
+| --- | --- | --- |
+| `GET` | `/api/health/` | Verificar o estado da API e do MongoDB |
+| `POST` | `/api/medicoes/` | Registrar uma nova medição |
+| `GET` | `/api/medicoes/ultima/` | Consultar a medição mais recente |
+| `GET` | `/api/station/latest` | Obter a resposta consumida pelo dashboard |
 
-### Principais endpoints
-
-| Método | Endpoint | Descrição |
-|---|---|---|
-| `GET` | `/api/health/` | Verifica o estado da API e do MongoDB |
-| `POST` | `/api/medicoes/` | Registra uma nova medição |
-| `GET` | `/api/medicoes/ultima/` | Retorna a última medição |
-| `GET` | `/api/station/latest` | Retorna os dados formatados para o dashboard |
-
-### Exemplo de requisição
-
-**POST `/api/medicoes/`**
+Exemplo de payload para `POST /api/medicoes/`:
 
 ```json
 {
-  "temperatura": 27.50,
-  "umidade": 65.20,
+  "temperatura": 27.5,
+  "umidade": 65.2,
   "pressao": 1013.25,
-  "luminosidade": 350.80
+  "luminosidade": 350.8
 }
 ```
 
-### Validação dos dados
+A API exige os quatro campos numéricos, rejeita valores nulos, `NaN` e infinitos e gera o timestamp em **UTC**. Ela preserva códigos numéricos de falha enviados pelos sensores; no dashboard, valores fora das faixas esperadas são apresentados como **“Leitura indisponível”**, sem eliminar os dados brutos do histórico.
 
-O backend verifica:
+**Respostas comuns:** `201` (registro realizado), `422` (dados inválidos) e `503` (banco indisponível).
 
-- Presença dos quatro campos obrigatórios.
-- Tipos numéricos válidos.
-- Ausência de valores nulos, infinitos ou NaN.
-
-Os valores numéricos são preservados como enviados, inclusive códigos de falha
-como `luminosidade: -1`, sem descartar os demais sensores. No painel, umidade
-fora de 0% a 100%, pressão negativa ou luminosidade negativa aparecem como
-`—` com “Leitura indisponível”. Os valores originais permanecem no banco e no
-histórico da API. Zero continua sendo uma medição válida.
-
-O timestamp é gerado automaticamente pelo backend em UTC.
-
-**Respostas HTTP relevantes:**
-
-| Código | Significado |
-|---|---|
-| `201` | Medição registrada com sucesso |
-| `422` | Dados inválidos |
-| `503` | Banco de dados indisponível |
-
-Documentação completa: [Integração e dados](docs/INTEGRACAO.md).
+Mais detalhes: [docs/INTEGRACAO.md](docs/INTEGRACAO.md).
 
 ## ✅ Testes e validação
 
-O projeto possui testes automatizados para validar a comunicação entre firmware, backend, banco de dados e frontend.
-
-Para executar a validação completa:
+Para executar a rotina de validação disponível no Windows:
 
 ```powershell
 .\scripts\validar.cmd
 ```
 
-A rotina verifica:
+A rotina abrange testes de backend e frontend, integração com MongoDB, contrato JSON do firmware, lint, TypeScript, build do Next.js e comunicação HTTP.
 
-- Testes automatizados do backend.
-- Testes automatizados do frontend.
-- Integração real com MongoDB.
-- Validação do contrato JSON do firmware.
-- Verificação de lint e TypeScript.
-- Build da aplicação Next.js.
-- Integração HTTP entre os componentes.
-- Gravação de códigos de falha dos sensores sem interromper os demais cards.
+**Resultados registrados em 07/11/2026:**
 
-### Resultados registrados
-
-Na revisão de **07/11/2026**, foram registrados:
-
-| Verificação | Resultado |
-|---|---|
-| Testes do backend | 83 aprovados |
-| Testes do frontend | 16 aprovados |
+| Verificação | Resultado naquela revisão |
+| --- | --- |
+| Testes automatizados do backend | **83 aprovados** |
+| Testes automatizados do frontend | **16 aprovados** |
 | Lint e TypeScript | Aprovados |
 | Build do Next.js | Aprovado |
 | Integração HTTP | Aprovada |
 | Compilação do firmware ESP32 | Aprovada |
 
-> Esses resultados comprovam as verificações de software realizadas naquela revisão. Os testes físicos de sensores, USB, Wi-Fi e montagem eletrônica precisam ser executados separadamente.
+> Esses números registram a revisão indicada, **não um status de CI em tempo real**. Testes físicos de sensores, montagem, USB e comunicação Wi-Fi devem ser realizados separadamente.
+
+## 📁 Organização do repositório
+
+```text
+Meteora/
+├── backend/                  # API, persistência e testes
+├── frontend/                 # Dashboard em Next.js
+├── firmware/                 # Sketch Arduino do ESP32
+├── docs/                     # Documentação técnica e recursos do README
+│   └── assets/               # Banner e futuras capturas reais
+├── scripts/                  # Preparação, execução, simulação e validação
+├── COMECAR-AQUI.md           # Guia completo de execução
+├── LICENSE                   # Licença MIT
+└── README.md                 # Visão geral do projeto
+```
 
 ## 📚 Documentação
 
-A documentação técnica foi separada por responsabilidade para facilitar a manutenção e a compreensão do projeto.
-
 | Documento | Conteúdo |
-|---|---|
-| [Começar aqui](COMECAR-AQUI.md) | Instalação, execução e solução de problemas |
-| [Funcionamento](docs/FUNCIONAMENTO.md) | Fluxo completo dos dados |
-| [Arquitetura](docs/ARQUITETURA.md) | Componentes e comunicação |
-| [Integração](docs/INTEGRACAO.md) | Contratos, validação e persistência |
-| [Índice da documentação](docs/README.md) | Organização dos documentos |
+| --- | --- |
+| [Começar aqui](COMECAR-AQUI.md) | Instalação, execução e resolução de problemas |
+| [Funcionamento](docs/FUNCIONAMENTO.md) | Caminho percorrido pelos dados |
+| [Arquitetura](docs/ARQUITETURA.md) | Estrutura e comunicação entre componentes |
+| [Integração](docs/INTEGRACAO.md) | API, validações e persistência |
+| [Índice da documentação](docs/README.md) | Navegação pelos documentos técnicos |
 | [Backend](backend/README.md) | Configuração e funcionamento da API |
-| [Frontend](frontend/README.md) | Configuração e funcionamento do dashboard |
+| [Frontend](frontend/README.md) | Estrutura e execução da interface |
 
-## 🎓 Contexto acadêmico
+## 🎓 Contexto acadêmico e créditos
 
-O Meteora é desenvolvido como projeto integrador da disciplina **Projeto e Desenvolvimento II**, do curso de **Ciência da Computação da Universidade Paulista (UNIP)**.
+O Meteora foi desenvolvido em equipe para a disciplina **Projeto e Desenvolvimento II**, do curso de **Ciência da Computação da Universidade Paulista (UNIP)**, como aplicação prática de conhecimentos em sistemas embarcados, eletrônica, APIs, bancos de dados e desenvolvimento web.
 
-O trabalho tem como propósito aplicar conhecimentos adquiridos ao longo do semestre, integrando programação, eletrônica digital, sistemas embarcados, banco de dados e desenvolvimento web.
+As contribuições individuais podem ser consultadas no [histórico de commits](https://github.com/UNIP-Projetos-da-Faculdade/Meteora/commits/main) e na [página de contribuidores](https://github.com/UNIP-Projetos-da-Faculdade/Meteora/graphs/contributors).
 
-A proposta está relacionada ao conceito de **cidades inteligentes**, utilizando tecnologias de IoT para coleta e disponibilização de informações ambientais.
+<!-- Quando a equipe confirmar nomes, perfis e responsabilidades, inclua uma tabela
+     'Integrante | Responsabilidade | GitHub' aqui. Não atribua funções por suposição. -->
+
+## 📦 Versão e licença
+
+A versão acadêmica final está publicada como [**Meteora v1.0.0**](https://github.com/UNIP-Projetos-da-Faculdade/Meteora/releases/tag/v1.0.0).
+
+O código está disponível sob a **licença MIT**. Consulte o arquivo [LICENSE](LICENSE) para os termos completos.
 
 ---
 
-**Meteora — Tecnologia, dados e monitoramento ambiental.**
+<div align="center">
+  <sub><strong>Meteora</strong> — Tecnologia, dados e monitoramento ambiental.</sub>
+</div>
